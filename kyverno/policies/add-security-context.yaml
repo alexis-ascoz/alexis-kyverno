@@ -1,0 +1,18 @@
+apiVersion: kyverno.io/v1
+kind: Policy
+metadata:
+  name: add-security-context
+  namespace: app
+spec:
+  rules:
+    - name: add-default-security-context
+      match:
+        resources:
+          kinds:
+            - Pod
+      mutate:
+        patchStrategicMerge:
+          spec:
+            securityContext:
+              runAsNonRoot: true
+              runAsUser: 1000

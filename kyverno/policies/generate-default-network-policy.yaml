@@ -1,0 +1,24 @@
+apiVersion: kyverno.io/v1
+kind: Policy
+metadata:
+  name: generate-default-network-policy
+  namespace: app
+spec:
+  rules:
+    - name: generate-network-policy
+      match:
+        resources:
+          kinds:
+            - Pod
+      generate:
+        apiVersion: networking.k8s.io/v1
+        kind: NetworkPolicy
+        name: default-deny
+        namespace: app
+        data:
+          spec:
+            podSelector:
+              matchLabels: "{{ request.object.metadata.labels }}"
+            policyTypes:
+              - Ingress
+              - Egress

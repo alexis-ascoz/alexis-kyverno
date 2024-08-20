@@ -1,0 +1,25 @@
+apiVersion: kyverno.io/v1
+kind: Policy
+metadata:
+  name: restrict-pod-resource-requests-limits
+  namespace: app
+spec:
+  validationFailureAction: Enforce
+  rules:
+    - name: check-resource-requests-limits
+      match:
+        resources:
+          kinds:
+            - Pod
+      validate:
+        message: "Pods must have both CPU and memory requests and limits defined with a minimum of 100m CPU and 128Mi memory."
+        pattern:
+          spec:
+            containers:
+              - resources:
+                  requests:
+                    memory: ">=128Mi"
+                    cpu: ">=100m"
+                  limits:
+                    memory: ">=128Mi"
+                    cpu: ">=100m"

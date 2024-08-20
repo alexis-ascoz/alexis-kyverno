@@ -1,0 +1,12 @@
+apiVersion: k3d.io/v1alpha4
+kind: Simple
+metadata:
+  name: kyverno
+servers: 1
+agents: 2
+options:
+  k3s:
+    extraArgs:
+      - arg: --disable=traefik
+        nodeFilters:
+          - servers:*
